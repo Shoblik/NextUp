@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <%- include('./partials/head'); %>
+        <script>
+            $(document).ready(() => signup.init());
+        </script>
+    </head>
+    <body>
+        <main class="signup container">
+            <%- include('./partials/header'); %>
+            <div class="row signup-form">
+                <div class="col-md-12">
+                    <h2 id="signupFormPrompt"></h2>
+                    <input id="signupFormInput" type="text" />
+                    <div class="button-container">
+                        <button id="signupPrev">Prev</button>
+                        <button class="next-btn" id="signupNext">Next</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>
