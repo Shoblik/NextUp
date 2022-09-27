@@ -34,7 +34,7 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../keymander.com" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="Settings.JavaScript" />
@@ -55,7 +55,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1664230924748</updated>
-      <workItem from="1664230925785" duration="7813000" />
+      <workItem from="1664230925785" duration="9452000" />
     </task>
     <servers />
   </component>
@@ -63,6 +63,10 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="1322" y="395" key="FileChooserDialogImpl" timestamp="1664240205083">
+      <screen x="0" y="0" width="2560" height="1392" />
+    </state>
+    <state x="1322" y="395" key="FileChooserDialogImpl/0.0.2560.1392/-1920.7.1920.1080@0.0.2560.1392" timestamp="1664240205083" />
     <state x="1089" y="602" key="NewPhpFileDialog" timestamp="1664231188324">
       <screen x="0" y="0" width="2560" height="1392" />
     </state>

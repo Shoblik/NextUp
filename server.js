@@ -14,4 +14,16 @@ app.get('/user/signup', (req, res) => {
     res.render('signup');
 });
 
+app.post('/user/signup', (req, res) => {
+    const data = {
+        success: true,
+        errors: [],
+        user: null,
+    }
+
+    
+
+    console.log(req.body);
+});
+
 app.listen(3000)

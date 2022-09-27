@@ -1,7 +1,7 @@
 const signup = {
-    name: null,
-    email: null,
-    business: null,
+    name: 'Simon',
+    email: 'email',
+    business: 'business',
 
     init: () => {
         signup.getName();
@@ -56,5 +56,23 @@ const signup = {
 
     doSignup: () => {
         console.log(`${signup.name} ${signup.email} ${signup.business}`);
+
+        $.ajax({
+            url: '/user/signup',
+            data: {
+                name: signup.name,
+                email: signup.email,
+                business: signup.business
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function(response) {
+                console.log(response)
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
+
     }
 }
