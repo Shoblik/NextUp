@@ -10,20 +10,8 @@ app.get('/', (req, res) => {
     res.render('index')
 });
 
-app.get('/user/signup', (req, res) => {
-    res.render('signup');
-});
+const userRouter = require('./routes/user');
 
-app.post('/user/signup', (req, res) => {
-    const data = {
-        success: true,
-        errors: [],
-        user: null,
-    }
-
-    
-
-    console.log(req.body);
-});
+app.use('/user', userRouter);
 
 app.listen(3000)
