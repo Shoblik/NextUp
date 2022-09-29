@@ -7,6 +7,7 @@
         </script>
     </head>
     <body>
+        <%- include('./partials/menu'); %>
         <main class="signup container">
             <%- include('./partials/header'); %>
             <div class="row signup-form">
@@ -14,7 +15,7 @@
                     <h2 id="signupFormPrompt"></h2>
                     <input id="signupFormInput" type="text" />
                     <div class="button-container">
-                        <button id="signupPrev">Prev</button>
+                        <button class="prev-btn" id="signupPrev">Prev</button>
                         <button class="next-btn" id="signupNext">Next</button>
                     </div>
                 </div>

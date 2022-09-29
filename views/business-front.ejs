@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <%- include('./partials/head'); %>
+    <script>
+        $(document).ready(() => storeFront.init('<%=businessUri%>'));
+    </script>
+</head>
+<body>
+<%- include('./partials/menu'); %>
+<div id="addModal" class="add-to-queue-modal container">
+    <div class="row">
+        <div class="col">
+            <i id="closeModal" class="fa fa-times-circle"></i>
+            <h2 class="text-center">Join the Wait list</h2>
+            <p>Name:</p>
+            <input type="text" id="name" />
+            <p>Phone:</p>
+            <input type="text" id="phone" />
+            <p>Party Size:</p>
+            <select name="size of party" id="size"></select>
+            <div class="btn-container text-end">
+                <button class="standard-btn">Submit</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+<main class="store-front container">
+<!--    <%- include('./partials/header'); %>-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1 id="storeName"></h1>
+            </div>
+        </div>
+        <div class="row add-party-container">
+            <div class="col-md-12 text-end">
+                <i id="addParty" class="fa fa-plus-circle"></i>
+            </div>
+        </div>
+    </div>
+    <div id="queueContainer" class="container">
+        <div class="row one-party text-start">
+            <div class="col text-center">
+                <p>Secure your spot</p>
+                <p>at the front of the line!</p>
+            </div>
+        </div>
+<!--        <div class="row one-party text-start">-->
+<!--            <p class="queue-num">1</p>-->
+<!--            <p class="name">Simon Hoblik</p>-->
+<!--            <p class="party">party: 6</p>-->
+<!--        </div>-->
+<!--        <div class="row one-party text-start">-->
+<!--            <p class="queue-num">1</p>-->
+<!--            <p class="name">Simon Hoblik</p>-->
+<!--            <p class="party">party: 6</p>-->
+<!--        </div>-->
+<!--        <div class="row one-party text-start">-->
+<!--            <p class="queue-num">1</p>-->
+<!--            <p class="name">Simon Hoblik</p>-->
+<!--            <p class="party">party: 6</p>-->
+<!--        </div>-->
+<!--        <div class="row one-party text-start">-->
+<!--            <p class="queue-num">1</p>-->
+<!--            <p class="name">Simon Hoblik</p>-->
+<!--            <p class="party">party: 6</p>-->
+<!--        </div>-->
+<!--        <div class="row one-party text-start">-->
+<!--            <p class="queue-num">1</p>-->
+<!--            <p class="name">Simon Hoblik</p>-->
+<!--            <p class="party">party: 6</p>-->
+<!--        </div>-->
+<!--        <div class="row one-party text-start">-->
+<!--            <p class="queue-num">1</p>-->
+<!--            <p class="name">Simon Hoblik</p>-->
+<!--            <p class="party">party: 6</p>-->
+<!--        </div>-->
+    </div>
+</main>
+</body>
+</html>
