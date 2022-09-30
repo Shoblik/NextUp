@@ -3,7 +3,7 @@
 <head>
     <%- include('./partials/head'); %>
     <script>
-        $(document).ready(() => storeFront.init('<%=businessUri%>'));
+        $(document).ready(() => storeFront.init('<%=businessUri%>', <%=businessId%>));
     </script>
 </head>
 <body>
@@ -12,11 +12,11 @@
     <div class="row">
         <div class="col">
             <i id="closeModal" class="fa fa-times-circle"></i>
-            <h2 class="text-center">Join the Wait list</h2>
+            <h2 class="text-center">Join the Waiting list</h2>
             <p>Name:</p>
-            <input type="text" name="name" id="name" />
+            <input type="text" name="name" id="name" value="Simon Hoblik" />
             <p>Phone:</p>
-            <input type="text" name="phone" id="phone" />
+            <input type="text" name="phone" id="phone" value="6572822679" />
             <p>Party Size:</p>
             <select name="size of party" id="size">
                 <option value="1">1</option>
@@ -43,7 +43,7 @@
                 <option value="22">22</option>
             </select>
             <div class="btn-container text-end">
-                <button class="standard-btn">Submit</button>
+                <button id="addPartyButton" class="standard-btn">Submit</button>
             </div>
         </div>
     </div>
@@ -64,16 +64,11 @@
         </div>
     </div>
     <div id="queueContainer" class="container">
-        <div class="row one-party text-start">
-            <div class="col text-center">
-                <p>Secure your spot</p>
-                <p>at the front of the line!</p>
-            </div>
-        </div>
 <!--        <div class="row one-party text-start">-->
-<!--            <p class="queue-num">1</p>-->
-<!--            <p class="name">Simon Hoblik</p>-->
-<!--            <p class="party">party: 6</p>-->
+<!--            <div class="col text-center">-->
+<!--                <p>Secure your spot</p>-->
+<!--                <p>at the front of the line!</p>-->
+<!--            </div>-->
 <!--        </div>-->
 <!--        <div class="row one-party text-start">-->
 <!--            <p class="queue-num">1</p>-->
@@ -100,7 +95,12 @@
 <!--            <p class="name">Simon Hoblik</p>-->
 <!--            <p class="party">party: 6</p>-->
 <!--        </div>-->
-    </div>
+<!--        <div class="row one-party text-start">-->
+<!--            <p class="queue-num">1</p>-->
+<!--            <p class="name">Simon Hoblik</p>-->
+<!--            <p class="party">party: 6</p>-->
+<!--        </div>-->
+<!--    </div>-->
 </main>
 </body>
 </html>

@@ -11,10 +11,9 @@ function getBusinessDetailsFromUri(businessUri) {
 
     return new Promise((resolve, reject) => {
         const sql = `
-        SELECT * FROM users WHERE business_uri = '${businessUri}' LIMIT 1;
+        SELECT * FROM business WHERE business_uri = '${businessUri}' LIMIT 1;
         `
-        console.log(sql);
-        mysqlCon.query(
+         mysqlCon.query(
             sql,
             (error, results, fields) => {
                 if (!error) {
@@ -33,15 +32,53 @@ function getBusinessDetailsFromUri(businessUri) {
     });
 }
 
+router.get('/signup', (req, res) => {
+    res.render('signup');
+})
+.post('/signup', (req, res) => {
+    const data = {
+        success: true,
+        errors: [],
+        user: null,
+        id: null
+    }
+    // clean the business name so there are no spaces
+    const businessUri = req.body.business.replace(new RegExp(' ', 'g'), '-');
+
+    const sql = `
+    INSERT INTO business (name, email, business, business_uri, updated_at, created_at)
+    VALUES('${req.body.name}','${req.body.email}','${req.body.business}', '${businessUri}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+`;
+
+    mysqlCon.query(
+        sql,
+        (error, results, fields) => {
+            if (!error) {
+                data['businessUri'] = businessUri;
+                data['user'] = true;
+                data['id'] = results.insertId;
+
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(data));
+            } else {
+                data['errors'] = error;
+                data['user'] = false;
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(data));
+            }
+        }
+    )
+});
+
 router.get('/:businessUri', (req, res) => {
     const businessUri = req.params.businessUri;
+    const businessId = req.query.id;
 
-    res.render('business-front', {businessUri});
+    res.render('business-front', {businessUri, businessId});
 
 }).post('/details', (req, res) => {
     //get business details
     getBusinessDetailsFromUri(req.body.businessUri).then((businessData) => {
-        console.log(businessData);
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(businessData));
     });

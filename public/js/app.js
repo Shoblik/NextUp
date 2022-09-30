@@ -38,7 +38,7 @@ const signup = {
     },
 
     getBusiness: () => {
-        $('#signupFormPrompt').text('Business name, the way you\'d like it to appear on your guests\' end.');
+        $('#signupFormPrompt').text('Business name, the way you\'d like it to appear on your guests\' end');
         $('#signupFormInput').val(signup.business ? signup.business : '');
 
         $('#signupNext').attr({
@@ -58,7 +58,7 @@ const signup = {
         console.log(`${signup.name} ${signup.email} ${signup.business}`);
 
         $.ajax({
-            url: '/user/signup',
+            url: '/business/signup',
             data: {
                 name: signup.name,
                 email: signup.email,
@@ -68,7 +68,7 @@ const signup = {
             dataType: 'JSON',
             success: function(response) {
                 if (response.user) {
-                    window.location.href = `/business/${response.businessUri}`;
+                    window.location.href = `/business/${response.businessUri}?id=${response.id}`;
                 } else {
                     // error handling
                 }
@@ -84,8 +84,9 @@ const signup = {
 
 var storeFront = {
     modalShowing: false,
+    businessId: null,
 
-    init: (businessUri) => {
+    init: (businessUri, businessId) => {
         $.ajax({
             url: '/business/details',
             data: {
@@ -106,9 +107,12 @@ var storeFront = {
             }
         });
 
+        storeFront.businessId = businessId;
+
         // attach event handlers
         $('#addParty').on('click', storeFront.toggleModal);
         $('#closeModal').on('click', storeFront.toggleModal);
+        $('#addPartyButton').on('click', storeFront.submitParty);
     },
 
     buildStoreFront: (business) => {
@@ -123,5 +127,33 @@ var storeFront = {
             $('#addModal').css('transform', 'none');
             storeFront.modalShowing = true;
         }
-    }
+    },
+
+    submitParty: () => {
+        const name = $('#name').val();
+        const partySize = $('#size').val();
+        $.ajax({
+            url: '/party/add',
+            data: {
+                name: name,
+                phone: $('#phone').val(),
+                partySize: partySize,
+                businessId: storeFront.businessId
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function(response) {
+                if (response.added) {
+                    storeFront.addParty(response.id);
+                } else {
+                    // error handling
+                }
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
+    },
+
+
 }
