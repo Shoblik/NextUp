@@ -15,4 +15,4 @@ app.get('/', (req, res) => {
 app.use('/business', businessRouter);
 app.use('/party', partyRouter);
 
-app.listen(3000)
+app.listen(3000);

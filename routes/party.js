@@ -32,6 +32,38 @@ function addParty(businessId, name, phone, partySize) {
     });
 }
 
+function getPartiesByBusinessId(businessId, active=1) {
+    const queryData = {
+        error: null,
+        parties: [],
+    }
+
+    return new Promise((resolve, reject) => {
+        const sql = `
+            SELECT * FROM parties 
+            WHERE business_id = ${businessId}
+            AND active = ${active}
+            ORDER BY created_at ASC
+        `;
+
+        mysqlCon.query(
+            sql,
+            (error, results, fields) => {
+                if (!error) {
+                    Object.keys(results).forEach(function(key) {
+                        let row = results[key];
+                        queryData.parties.push(row);
+                    });
+                    resolve(queryData);
+                } else {
+                    queryData.error = error;
+                    reject(queryData);
+                }
+            }
+        )
+    });
+}
+
 router.post('/add', (req, res) => {
     const name = req.body.name;
     const phone = req.body.phone;
@@ -39,6 +71,15 @@ router.post('/add', (req, res) => {
     const businessId = req.body.businessId;
 
     addParty(businessId, name, phone, partySize).then((queryResult) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(queryResult));
+    });
+})
+
+router.post('/allByBusinessId', (req, res) => {
+    const businessId = req.body.businessId;
+
+    getPartiesByBusinessId(businessId).then((queryResult) => {
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(queryResult));
     });

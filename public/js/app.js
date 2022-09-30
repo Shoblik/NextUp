@@ -87,6 +87,18 @@ var storeFront = {
     businessId: null,
 
     init: (businessUri, businessId) => {
+        storeFront.businessId = businessId;
+
+        storeFront.getStoreFrontDetails(businessUri, businessId);
+        storeFront.getActiveParties();
+
+        // attach event handlers
+        $('#addParty').on('click', storeFront.toggleModal);
+        $('#closeModal').on('click', storeFront.toggleModal);
+        $('#addPartyButton').on('click', storeFront.submitParty);
+    },
+
+    getStoreFrontDetails: (businessUri, businessId) => {
         $.ajax({
             url: '/business/details',
             data: {
@@ -106,13 +118,69 @@ var storeFront = {
                 console.log(response);
             }
         });
+    },
 
-        storeFront.businessId = businessId;
+    getActiveParties: () => {
+        $.ajax({
+            url: '/party/allByBusinessId',
+            data: {
+                businessId: storeFront.businessId
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function(response) {
+                if (response.parties.length) {
+                    //build the parties
+                    storeFront.buildParties(response.parties);
+                } else {
+                    // no parties, build the message
+                    storeFront.noPartiesMessage();
+                }
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
+    },
 
-        // attach event handlers
-        $('#addParty').on('click', storeFront.toggleModal);
-        $('#closeModal').on('click', storeFront.toggleModal);
-        $('#addPartyButton').on('click', storeFront.submitParty);
+    noPartiesMessage: () => {
+        const queue = $('#queueContainer');
+        const row = $('<div>').addClass('row one-party text-center').attr({
+            id: 'queuePlaceholder'
+        });
+        const p1 = $('<p>').text('Secure your spot');
+        const p2 = $('<p>').text('at the front of the line!');
+
+        $(row).append(p1, p2);
+        $(queue).append(row);
+    },
+
+    togglePartyActive: (partyIndex) => {
+        const partyEle = $('.one-party').children(partyIndex);
+        console.log(partyEle)
+    },
+
+    buildOneParty: (party, index) => {
+        const queue = $('#queueContainer');
+        const row = $('<div>').addClass('row one-party text-start').on('click', () => {
+            storeFront.togglePartyActive(index);
+        }).attr({
+            active: false
+        });
+        const num = $('<p>').addClass('queue-num').text(index + 1);
+        const name = $('<p>').addClass('name').text(`${party.name}`);
+        const partySize = $('<p>').addClass('party').text(`party: ${party.party_size}`);
+
+        $(row).append(num, name, partySize);
+        $(queue).append(row);
+    },
+
+    buildParties: (parties, forceIndex=false) => {
+        const queue = $('#queueContainer').empty();
+
+        parties.forEach((party, index) => {
+            storeFront.buildOneParty(party, index);
+        })
     },
 
     buildStoreFront: (business) => {
@@ -144,7 +212,13 @@ var storeFront = {
             dataType: 'JSON',
             success: function(response) {
                 if (response.added) {
-                    storeFront.addParty(response.id);
+                    $('#queuePlaceholder').remove();
+
+                    storeFront.toggleModal();
+                    storeFront.buildOneParty({
+                        name,
+                        party_size: partySize
+                    }, $('#queueContainer').children().length);
                 } else {
                     // error handling
                 }

@@ -11,14 +11,16 @@ function getBusinessDetailsFromUri(businessUri) {
 
     return new Promise((resolve, reject) => {
         const sql = `
-        SELECT * FROM business WHERE business_uri = '${businessUri}' LIMIT 1;
+        SELECT * FROM business 
+        WHERE business_uri = '${businessUri}' 
+        LIMIT 1;
         `
          mysqlCon.query(
             sql,
             (error, results, fields) => {
                 if (!error) {
                     Object.keys(results).forEach(function(key) {
-                        var row = results[key];
+                        let row = results[key];
                         queryData.results.push(row);
                     });
                     resolve(queryData);
@@ -83,6 +85,5 @@ router.get('/:businessUri', (req, res) => {
         res.send(JSON.stringify(businessData));
     });
 });
-
 
 module.exports = router;
