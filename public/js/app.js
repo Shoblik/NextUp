@@ -86,11 +86,8 @@ var storeFront = {
     modalShowing: false,
     businessId: null,
 
-    init: (businessUri, businessId) => {
-        storeFront.businessId = businessId;
-
-        storeFront.getStoreFrontDetails(businessUri, businessId);
-        storeFront.getActiveParties();
+    init: (businessUri) => {
+        storeFront.getStoreFrontDetails(businessUri);
 
         // attach event handlers
         $('#addParty').on('click', storeFront.toggleModal);
@@ -110,6 +107,13 @@ var storeFront = {
                 if (response.results.length) {
                     //create the store front
                     storeFront.buildStoreFront(response.results[0]);
+
+                    // set business id
+                    storeFront.businessId = response.results[0].id;
+
+                    // fetch active parties
+                    storeFront.getActiveParties();
+
                 } else {
                     // error handling
                 }
@@ -156,8 +160,21 @@ var storeFront = {
     },
 
     togglePartyActive: (partyIndex) => {
-        const partyEle = $('.one-party').children(partyIndex);
-        console.log(partyEle)
+        const partyEle = $('#party' + partyIndex);
+
+        if (Number(partyEle.attr('active'))) {
+            partyEle.removeClass('active-party').attr({
+                active: 0
+            });
+
+            $('#party' + partyIndex + ' .modifiers').slideUp('fast');
+        } else {
+            partyEle.addClass('active-party').attr({
+                active: 1
+            });
+
+            $('#party' + partyIndex + ' .modifiers').slideDown('fast');
+        }
     },
 
     buildOneParty: (party, index) => {
@@ -165,13 +182,24 @@ var storeFront = {
         const row = $('<div>').addClass('row one-party text-start').on('click', () => {
             storeFront.togglePartyActive(index);
         }).attr({
-            active: false
+            active: 0,
+            id: `party${index}`
         });
         const num = $('<p>').addClass('queue-num').text(index + 1);
         const name = $('<p>').addClass('name').text(`${party.name}`);
         const partySize = $('<p>').addClass('party').text(`party: ${party.party_size}`);
+        const modifiers = $('<div>').addClass('modifiers');
+        const text = $('<i>').addClass('fa fa-comment').on('click', (index) => {
+            event.stopPropagation(index);
 
-        $(row).append(num, name, partySize);
+            
+        });
+        const remove = $('<i>').addClass('fa fa-times-circle', () => {
+            event.stopPropagation(index);
+        });
+
+        $(modifiers).append(text, remove);
+        $(row).append(num, name, partySize, modifiers);
         $(queue).append(row);
     },
 

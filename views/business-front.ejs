@@ -3,7 +3,7 @@
 <head>
     <%- include('./partials/head'); %>
     <script>
-        $(document).ready(() => storeFront.init('<%=businessUri%>', <%=businessId%>));
+        $(document).ready(() => storeFront.init('<%= businessUri %>'));
     </script>
 </head>
 <body>
@@ -14,9 +14,9 @@
             <i id="closeModal" class="fa fa-times-circle"></i>
             <h2 class="text-center">Join the Waiting list</h2>
             <p>Name:</p>
-            <input type="text" name="name" id="name" value="Simon Hoblik" />
+            <input type="text" name="name" id="name" value="Simon Hoblik"/>
             <p>Phone:</p>
-            <input type="text" name="phone" id="phone" value="6572822679" />
+            <input type="text" name="phone" id="phone" value="6572822679"/>
             <p>Party Size:</p>
             <select name="size of party" id="size">
                 <option value="1">1</option>
@@ -28,7 +28,7 @@
                 <option value="7">7</option>
                 <option value="8">8</option>
                 <option value="9">9</option>
-                <option value="10"10></option>
+                <option value="10">10</option>
                 <option value="11">11</option>
                 <option value="12">12</option>
                 <option value="13">13</option>
@@ -50,7 +50,7 @@
 
 </div>
 <main class="store-front container">
-<!--    <%- include('./partials/header'); %>-->
+    <!--    <%- include('./partials/header'); %>-->
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
@@ -63,42 +63,7 @@
             </div>
         </div>
     </div>
-    <div id="queueContainer" class="container">
-<!--        <div class="row one-party text-center">-->
-<!--            <p>Secure your spot</p>-->
-<!--            <p>at the front of the line!</p>-->
-<!--        </div>-->
-<!--        <div class="row one-party text-start">-->
-<!--            <p class="queue-num">1</p>-->
-<!--            <p class="name">Simon Hoblik</p>-->
-<!--            <p class="party">party: 6</p>-->
-<!--        </div>-->
-<!--        <div class="row one-party text-start">-->
-<!--            <p class="queue-num">1</p>-->
-<!--            <p class="name">Simon Hoblik</p>-->
-<!--            <p class="party">party: 6</p>-->
-<!--        </div>-->
-<!--        <div class="row one-party text-start">-->
-<!--            <p class="queue-num">1</p>-->
-<!--            <p class="name">Simon Hoblik</p>-->
-<!--            <p class="party">party: 6</p>-->
-<!--        </div>-->
-<!--        <div class="row one-party text-start">-->
-<!--            <p class="queue-num">1</p>-->
-<!--            <p class="name">Simon Hoblik</p>-->
-<!--            <p class="party">party: 6</p>-->
-<!--        </div>-->
-<!--        <div class="row one-party text-start">-->
-<!--            <p class="queue-num">1</p>-->
-<!--            <p class="name">Simon Hoblik</p>-->
-<!--            <p class="party">party: 6</p>-->
-<!--        </div>-->
-<!--        <div class="row one-party text-start">-->
-<!--            <p class="queue-num">1</p>-->
-<!--            <p class="name">Simon Hoblik</p>-->
-<!--            <p class="party">party: 6</p>-->
-<!--        </div>-->
-<!--    </div>-->
+    <div id="queueContainer" class="container"></div>
 </main>
 </body>
 </html>

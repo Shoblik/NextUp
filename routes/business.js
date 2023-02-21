@@ -74,9 +74,8 @@ router.get('/signup', (req, res) => {
 
 router.get('/:businessUri', (req, res) => {
     const businessUri = req.params.businessUri;
-    const businessId = req.query.id;
 
-    res.render('business-front', {businessUri, businessId});
+    res.render('business-front', {businessUri});
 
 }).post('/details', (req, res) => {
     //get business details
