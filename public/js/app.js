@@ -190,12 +190,13 @@ var storeFront = {
         const partySize = $('<p>').addClass('party').text(`party: ${party.party_size}`);
         const modifiers = $('<div>').addClass('modifiers');
         const text = $('<i>').addClass('fa fa-comment').on('click', (index) => {
-            event.stopPropagation(index);
-
-            
+            event.stopPropagation();
+            console.log('clack');
         });
-        const remove = $('<i>').addClass('fa fa-times-circle', () => {
-            event.stopPropagation(index);
+
+        const remove = $('<i>').addClass('fa fa-times-circle').on('click', function() {
+            event.stopPropagation();
+            storeFront.removeParty(party.id);
         });
 
         $(modifiers).append(text, remove);
@@ -257,5 +258,26 @@ var storeFront = {
         });
     },
 
-
+    removeParty: (partyId) => {
+        // remove from queue on server
+        $.ajax({
+            url: '/party/remove',
+            data: {
+                partyId: partyId,
+                businessId: storeFront.businessId
+            },
+            type: 'POST',
+            dataType: 'JSON',
+            success: function(response) {
+                if (response.removed) {
+                    
+                } else {
+                    // error handling
+                }
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
+    }
 }

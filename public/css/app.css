@@ -18,7 +18,7 @@ a {
     margin: 65px 0 30px 0;
 }
 .sub-head {
-    border-bottom: 1px solid black;
+    border-bottom: 2px solid black;
     border-bottom-left-radius: 100%;
     border-bottom-right-radius: 100%;
     padding-bottom: 25px;
@@ -29,11 +29,15 @@ a {
 .landing .button-container button {
     min-width: 220px;
     font-size: 22px;
-    background-color: transparent;
-    border: 1px solid #1d1d1d;
+    background-color: white;
+    border: none;
     border-radius: 3px;
     margin-bottom: 16px;
     padding: 8px 16px;
+    box-shadow: 5px 5px 5px rgb(0 0 0 / 60%);
+    -moz-box-shadow: 5px 5px 5px rgba(0,0,0,0.6);
+    -webkit-box-shadow: 5px 5px 5px rgb(0 0 0 / 60%);
+    -o-box-shadow: 5px 5px 5px rgba(0,0,0,0.6);
 }
 .signup-form input {
     border-radius: 3px;
