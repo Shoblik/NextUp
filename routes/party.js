@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mysqlCon = require('../utils/database');
 const Promise = require('promise');
+const PartyModel = require('../models/PartyModel');
 
 function addParty(businessId, name, phone, partySize) {
     const queryData = {
@@ -64,29 +65,6 @@ function getPartiesByBusinessId(businessId, active=1) {
     });
 }
 
-function removePartyById(partyId) {
-    // todo: Make sure this request has the credentials for this
-    const queryData = {
-        error: null,
-        success: true,
-        removed: false
-    }
-
-    return new Promise((resolve, reject) => {
-        const sql = `
-            DELETE FROM parties WHERE id = ${businessId}
-        `;
-
-        mysqlCon.query(
-            sql,
-            (error, results, fields) => {
-                console.log(results);
-            }
-        )
-        console.log('test4');
-    });
-}
-
 router.post('/add', (req, res) => {
     const name = req.body.name;
     const phone = req.body.phone;
@@ -108,12 +86,17 @@ router.post('/allByBusinessId', (req, res) => {
     });
 })
 
+// separating models starting down here, will update the above.
+// The data object will be passed to the model and finally to a send function via callbacks.
 router.post('/remove', (req, res) => {
-    const partyId = req.body.businessId;
-    removePartyById(partyId).then((queryResult) => {
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(queryResult));
-    });
+    const data = {
+        partyId: req.body.partyId,
+        businessId: req.body.businessId,
+        error: null,
+        deleted: false,
+    }
+    
+    PartyModel.removeParty(data, res);
 })
 
 module.exports = router;

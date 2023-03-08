@@ -42,7 +42,7 @@ a {
 .signup-form input {
     border-radius: 3px;
     margin-bottom: 16px;
-    background-color: #F5F5F5;
+    background-color: white;
     border: 1px solid #1d1d1d;
     width: 100%;
     font-size: 18px;
@@ -136,7 +136,7 @@ p.queue-num {
 }
 .add-to-queue-modal input, .add-to-queue-modal select {
     margin-bottom: 16px;
-    background-color: #F5F5F5;
+    background-color: white;
     border: 1px solid #1d1d1d;
     width: 100%;
     font-size: 18px;

@@ -259,6 +259,7 @@ var storeFront = {
     },
 
     removeParty: (partyId) => {
+
         // remove from queue on server
         $.ajax({
             url: '/party/remove',
@@ -269,8 +270,8 @@ var storeFront = {
             type: 'POST',
             dataType: 'JSON',
             success: function(response) {
-                if (response.removed) {
-                    
+                if (response.deleted) {
+                    storeFront.getActiveParties();
                 } else {
                     // error handling
                 }
