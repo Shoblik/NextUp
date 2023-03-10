@@ -2,37 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mysqlCon = require('../utils/database');
 const Promise = require('promise');
-
-function getBusinessDetailsFromUri(businessUri) {
-    const queryData = {
-        error: null,
-        results: [],
-    }
-
-    return new Promise((resolve, reject) => {
-        const sql = `
-        SELECT * FROM business 
-        WHERE business_uri = '${businessUri}' 
-        LIMIT 1;
-        `
-         mysqlCon.query(
-            sql,
-            (error, results, fields) => {
-                if (!error) {
-                    Object.keys(results).forEach(function(key) {
-                        let row = results[key];
-                        queryData.results.push(row);
-                    });
-                    resolve(queryData);
-                } else {
-                    queryData.error = error;
-                    reject(queryData);
-                }
-
-            }
-        )
-    });
-}
+const BusinessModel = require('../models/BusinessModel');
 
 router.get('/signup', (req, res) => {
     res.render('signup');
@@ -44,32 +14,15 @@ router.get('/signup', (req, res) => {
         user: null,
         id: null
     }
+
     // clean the business name so there are no spaces
     const businessUri = req.body.business.replace(new RegExp(' ', 'g'), '-');
 
-    const sql = `
-    INSERT INTO business (name, email, business, business_uri, updated_at, created_at)
-    VALUES('${req.body.name}','${req.body.email}','${req.body.business}', '${businessUri}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-`;
-
-    mysqlCon.query(
-        sql,
-        (error, results, fields) => {
-            if (!error) {
-                data['businessUri'] = businessUri;
-                data['user'] = true;
-                data['id'] = results.insertId;
-
-                res.setHeader('Content-Type', 'application/json');
-                res.send(JSON.stringify(data));
-            } else {
-                data['errors'] = error;
-                data['user'] = false;
-                res.setHeader('Content-Type', 'application/json');
-                res.send(JSON.stringify(data));
-            }
-        }
-    )
+    // Sends from here
+    BusinessModel.businessSignUp(req.body.name, req.body.email, req.body.business, businessUri, data, res);
+ 
+    // todo: log new sign up or something
+    
 });
 
 router.get('/:businessUri', (req, res) => {
@@ -78,11 +31,13 @@ router.get('/:businessUri', (req, res) => {
     res.render('business-front', {businessUri});
 
 }).post('/details', (req, res) => {
-    //get business details
-    getBusinessDetailsFromUri(req.body.businessUri).then((businessData) => {
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(businessData));
-    });
+    const data = {
+        error: null,
+        results: [],
+    }
+
+    // Sends from here
+    BusinessModel.getBusinessDetailsFromUri(req.body.businessUri, data, res);
 });
 
 module.exports = router;

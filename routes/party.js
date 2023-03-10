@@ -4,35 +4,6 @@ const mysqlCon = require('../utils/database');
 const Promise = require('promise');
 const PartyModel = require('../models/PartyModel');
 
-function addParty(businessId, name, phone, partySize) {
-    const queryData = {
-        error: null,
-        added: false,
-        id: null
-    }
-
-    return new Promise((resolve, reject) => {
-        const sql = `
-        INSERT INTO parties (business_id, name, phone, party_size, created_at, updated_at)
-        VALUES('${businessId}', '${name}', '${phone}', '${partySize}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-        `;
-
-        mysqlCon.query(
-            sql,
-            (error, results, fields) => {
-                if (!error) {
-                    queryData.id = results.insertId;
-                    queryData.added = true;
-                    resolve(queryData);
-                } else {
-                    queryData.error = error;
-                    reject(queryData);
-                }
-            }
-        )
-    });
-}
-
 function getPartiesByBusinessId(businessId, active=1) {
     const queryData = {
         error: null,
@@ -66,28 +37,26 @@ function getPartiesByBusinessId(businessId, active=1) {
 }
 
 router.post('/add', (req, res) => {
-    const name = req.body.name;
-    const phone = req.body.phone;
-    const partySize = req.body.partySize;
-    const businessId = req.body.businessId;
+    const data = {
+        error: null,
+        added: false,
+        id: null
+    }
 
-    addParty(businessId, name, phone, partySize).then((queryResult) => {
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(queryResult));
-    });
+    PartyModel.addParty(req.body.businessId, req.body.name, req.body.phone, req.body.partySize, data, res)
 })
 
 router.post('/allByBusinessId', (req, res) => {
+    const data = {
+        error: null,
+        parties: [],
+    }
+
     const businessId = req.body.businessId;
 
-    getPartiesByBusinessId(businessId).then((queryResult) => {
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(queryResult));
-    });
+    PartyModel.getPartiesByBusinessId(businessId, 1, data, res);
 })
 
-// separating models starting down here, will update the above.
-// The data object will be passed to the model and finally to a send function via callbacks.
 router.post('/remove', (req, res) => {
     const data = {
         partyId: req.body.partyId,
