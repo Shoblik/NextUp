@@ -2,9 +2,9 @@ const mysqlCon = require('../utils/database');
 
 
 const sql = `
-    CREATE DATABASE IF NOT EXISTS nextup1;
+    CREATE DATABASE IF NOT EXISTS nextup;
 
-    USE nextup1;
+    USE nextup;
 
     CREATE TABLE IF NOT EXISTS parties (
     id int(11) NOT NULL AUTO_INCREMENT,
