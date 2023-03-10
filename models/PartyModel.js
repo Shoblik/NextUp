@@ -5,13 +5,10 @@ exports.removeParty = (data, res) => {
             UPDATE parties set active = 0 WHERE id = ${data.partyId}
         `;
 
-    console.log(sql);
-
     mysqlCon.query(
         sql, 
         (error, results) => {
             if (!error) {
-                console.log(results);
                 data.deleted = true;
             } else {
                 console.log(error);

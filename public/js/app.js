@@ -133,6 +133,8 @@ var storeFront = {
             type: 'POST',
             dataType: 'JSON',
             success: function(response) {
+                const queue = $('#queueContainer').empty();
+
                 if (response.parties.length) {
                     //build the parties
                     storeFront.buildParties(response.parties);
@@ -205,7 +207,6 @@ var storeFront = {
     },
 
     buildParties: (parties, forceIndex=false) => {
-        const queue = $('#queueContainer').empty();
 
         parties.forEach((party, index) => {
             storeFront.buildOneParty(party, index);
@@ -246,7 +247,8 @@ var storeFront = {
                     storeFront.toggleModal();
                     storeFront.buildOneParty({
                         name,
-                        party_size: partySize
+                        party_size: partySize,
+                        id: response.id
                     }, $('#queueContainer').children().length);
                 } else {
                     // error handling
