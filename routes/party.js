@@ -4,38 +4,6 @@ const mysqlCon = require('../utils/database');
 const Promise = require('promise');
 const PartyModel = require('../models/PartyModel');
 
-function getPartiesByBusinessId(businessId, active=1) {
-    const queryData = {
-        error: null,
-        parties: [],
-    }
-
-    return new Promise((resolve, reject) => {
-        const sql = `
-            SELECT * FROM parties 
-            WHERE business_id = ${businessId}
-            AND active = ${active}
-            ORDER BY created_at ASC
-        `;
-
-        mysqlCon.query(
-            sql,
-            (error, results, fields) => {
-                if (!error) {
-                    Object.keys(results).forEach(function(key) {
-                        let row = results[key];
-                        queryData.parties.push(row);
-                    });
-                    resolve(queryData);
-                } else {
-                    queryData.error = error;
-                    reject(queryData);
-                }
-            }
-        )
-    });
-}
-
 router.post('/add', (req, res) => {
     const data = {
         error: null,
@@ -43,7 +11,21 @@ router.post('/add', (req, res) => {
         id: null
     }
 
-    PartyModel.addParty(req.body.businessId, req.body.name, req.body.phone, req.body.partySize, data, res)
+    PartyModel.addParty(req.body.businessId, req.body.name, req.body.phone, req.body.partySize, data, res).then(queryData => {
+        data.added = queryData.added;
+        data.id = queryData.id;
+
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(data));
+    }).catch(error => {
+        data.error = true;
+        console.log(error)
+
+
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(data));
+        // do some error logging
+    })
 })
 
 router.post('/allByBusinessId', (req, res) => {
@@ -52,9 +34,22 @@ router.post('/allByBusinessId', (req, res) => {
         parties: [],
     }
 
-    const businessId = req.body.businessId;
+    res.setHeader('Content-Type', 'application/json');
 
-    PartyModel.getPartiesByBusinessId(businessId, 1, data, res);
+
+    PartyModel.getPartiesByBusinessId(req.body.businessId).then((parties) => {
+        data.parties = parties;
+
+        res.send(JSON.stringify(data));
+    }).catch((error) => {
+        data.error = true;
+
+        res.send(JSON.stringify(data));
+        
+        console.log(error);
+
+        // do some logging
+    });
 })
 
 router.post('/remove', (req, res) => {
@@ -64,8 +59,22 @@ router.post('/remove', (req, res) => {
         error: null,
         deleted: false,
     }
+
+    res.setHeader('Content-Type', 'application/json');
     
-    PartyModel.removeParty(data, res);
+    PartyModel.removeParty(data.partyId).then(affectedRows => {
+
+        data.deleted = affectedRows === 1 ? true : false;
+        
+        res.send(JSON.stringify(data));
+    }).catch(error => {
+        data.error = true;
+        
+        res.send(JSON.stringify(data));
+        console.log(error);
+
+        // do some logging
+    });
 })
 
 module.exports = router;

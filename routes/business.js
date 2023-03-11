@@ -15,13 +15,26 @@ router.get('/signup', (req, res) => {
         id: null
     }
 
+    res.setHeader('Content-Type', 'application/json');
+
     // clean the business name so there are no spaces
     const businessUri = req.body.business.replace(new RegExp(' ', 'g'), '-');
 
-    // Sends from here
-    BusinessModel.businessSignUp(req.body.name, req.body.email, req.body.business, businessUri, data, res);
+    BusinessModel.businessSignUp(req.body.name, req.body.email, req.body.business, businessUri, data, res).then(queryData => {
+        data.user = true;
+        data.id = queryData.id;
+        data.businessUri = queryData.businessUri;
+        
+        res.send(JSON.stringify(data));
+    }).catch(error => {
+        data.errors.push('Failed to signup.');
+
+        res.send(JSON.stringify(data));
+        console.log(error);
+
+        // do some logging
+    });
  
-    // todo: log new sign up or something
     
 });
 
@@ -36,8 +49,19 @@ router.get('/:businessUri', (req, res) => {
         results: [],
     }
 
-    // Sends from here
-    BusinessModel.getBusinessDetailsFromUri(req.body.businessUri, data, res);
+    res.setHeader('Content-Type', 'application/json');
+
+    BusinessModel.getBusinessDetailsFromUri(req.body.businessUri).then(queryData => {
+        data.results = queryData;
+        
+        res.send(JSON.stringify(data));
+    }).catch(errors => {
+        
+        res.send(JSON.stringify(data));
+        console.log(errors);
+
+        //do some logging
+    });
 });
 
 module.exports = router;

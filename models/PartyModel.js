@@ -1,68 +1,79 @@
 const mysqlCon = require('../utils/database');
 
-exports.removeParty = (data, res) => {
-    const sql = `
-            UPDATE parties set active = 0 WHERE id = ${data.partyId}
+exports.removeParty = (partyId) => {
+    return new Promise((resolve, reject) => {
+        const sql = `
+        UPDATE parties set active = 0 WHERE id = ${partyId}
         `;
 
-    mysqlCon.query(
-        sql, 
-        (error, results) => {
-            if (!error) {
-                data.deleted = true;
-            } else {
-                console.log(error);
-            }
-        
-            res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify(data));
-    });
+        mysqlCon.query(
+            sql, 
+            (error, results) => {
+                if (!error) {
+                    resolve(results.affectedRows);
+                } else {
+                    reject(error)
+                }
+        });
+    })
+    
 }
 
 exports.addParty = (businessId, name, phone, partySize, data, res) => {
-    const sql = `
+    return new Promise((resolve, reject) => {
+        let data = {
+            added: false,
+            id: null
+        }
+
+        const sql = `
         INSERT INTO parties (business_id, name, phone, party_size, created_at, updated_at)
         VALUES('${businessId}', '${name}', '${phone}', '${partySize}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
         `;
-    
-    mysqlCon.query(
-        sql,
-        (error, results) => {
-            if (!error) {
-                data.id = results.insertId;
-                data.added = true;
-            } else {
-                data.error = error;
-            }
 
-            res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify(data));
-        }
-    )
+        mysqlCon.query(
+            sql,
+            (error, results) => {
+                if (!error) {
+                    data.id = results.insertId;
+                    data.added = true;
+
+                    resolve(data);
+                } else {
+                    
+                    reject(error);
+                }
+
+            }
+        )
+    });
 }
 
-exports.getPartiesByBusinessId = (businessId, active, data, res) => {
-    const sql = `
+exports.getPartiesByBusinessId = (businessId) => {
+    return new Promise((resolve, reject) => {
+        const parties = [];
+
+        const sql = `
             SELECT * FROM parties 
             WHERE business_id = ${businessId}
-            AND active = ${active}
+            AND active = 1
             ORDER BY created_at ASC
         `;
 
         mysqlCon.query(
             sql,
-            (error, results, fields) => {
+            (error, results) => {
                 if (!error) {
                     Object.keys(results).forEach(function(key) {
                         let row = results[key];
-                        data.parties.push(row);
+                        parties.push(row);
                     });
-                } else {
-                    data.error = error;
-                }
 
-                res.setHeader('Content-Type', 'application/json');
-                res.send(JSON.stringify(data));
+                    resolve(parties);
+                } else {
+                    reject(error);
+                }
             }
         )
+    });
 }
