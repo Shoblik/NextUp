@@ -68,7 +68,7 @@ const signup = {
             dataType: 'JSON',
             success: function(response) {
                 if (response.user) {
-                    window.location.href = `/business/${response.businessUri}?id=${response.id}`;
+                    window.location.href = `/business/${response.businessUri}`;
                 } else {
                     // error handling
                 }

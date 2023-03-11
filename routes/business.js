@@ -20,6 +20,7 @@ router.get('/signup', (req, res) => {
     // clean the business name so there are no spaces
     const businessUri = req.body.business.replace(new RegExp(' ', 'g'), '-');
 
+
     BusinessModel.businessSignUp(req.body.name, req.body.email, req.body.business, businessUri, data, res).then(queryData => {
         data.user = true;
         data.id = queryData.id;
@@ -27,7 +28,13 @@ router.get('/signup', (req, res) => {
         
         res.send(JSON.stringify(data));
     }).catch(error => {
-        data.errors.push('Failed to signup.');
+        if (error.errno === 1062) {
+            // duplicate error
+            data.errors.push('This business name is already taken, please try again.');
+        } else {
+            
+            data.errors.push('Failed to signup.');
+        }
 
         res.send(JSON.stringify(data));
         console.log(error);

@@ -43,7 +43,7 @@ exports.businessSignUp = (name, email, business, businessUri) => {
 
                     resolve(results);
                 } else {
-                    
+                
                     reject(error);
                 }
             }

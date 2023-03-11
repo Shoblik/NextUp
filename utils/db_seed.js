@@ -30,20 +30,21 @@ const sql = `
     active tinyint(4) DEFAULT 1,
     updated_at timestamp NULL DEFAULT current_timestamp(),
     created_at timestamp NULL DEFAULT current_timestamp(),
-    PRIMARY KEY (id)
-  ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
+    PRIMARY KEY (id),
+    UNIQUE KEY business_uri (business_uri)
+  ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 
   `
 
 mysqlCon.query(
     sql, 
     (error, results) => {
-        if (!error) {
-            console.log(results);
-        } else {
-            console.log(error);
-        }
+      if (!error) {
+          console.log('DB seed successful!');
+      } else {
+          console.log(error);
+      }
     
-        
+      process.exit(0);
 });
 
